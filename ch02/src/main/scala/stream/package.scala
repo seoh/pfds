@@ -42,9 +42,11 @@ package object stream {
       }
     }
 
-    def ++(that: Stream[C, T]): Stream[C, T] = force(this) match {
-      case Nil => that
-      case Cons(h, t) => delay(Cons(h, t ++ that))
+    def ++(that: Stream[C, T]): Stream[C, T] = delay {
+      force(this) match {
+        case Nil => force(that)
+        case Cons(h, t) => Cons(h, t ++ that)
+      }
     }
   }
 
