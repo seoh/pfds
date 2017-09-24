@@ -30,4 +30,7 @@ object TaskStream extends App {
   assert(e.drop(2).toString == "Stream()",      "empty.drop(n) should be Nil")
   assert(s.drop(0).toString == s.toString,      "nonEmpty.drop(0) should be itself")
   assert(s.drop(2).toString == s"Stream(${(2 until 10).mkString(", ")})")
+
+  assert(s.reverse.toString == s"Stream(${(0 until 10).reverse.mkString(", ")})")
+  assert(e.reverse.toString == e.toString)
 }

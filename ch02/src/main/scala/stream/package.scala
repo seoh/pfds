@@ -58,6 +58,17 @@ package object stream {
         case Cons(h, t) => force(t.drop(n-1))
       }
     }
+
+    def reverse: Stream[C, T] = {
+      def _reverse(s: Stream[C, T], r: StreamCell[C, T]): Stream[C, T] = delay {
+        force(s) match {
+          case Nil => r
+          case Cons(h, t) => force(_reverse(t, Cons(h, delay(r))))
+        }
+      }
+
+      _reverse(this, Nil)
+    }
   }
 
   object Stream {
