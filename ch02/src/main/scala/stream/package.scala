@@ -14,9 +14,8 @@ package object stream {
     def force[T](stream: Stream[C, T]): StreamCell[C, T]
   }
 
-  def delay[C[_], T](exp: => StreamCell[C, T])(implicit ops: StreamOps[C]): Stream[C, T] = {
+  def delay[C[_], T](exp: => StreamCell[C, T])(implicit ops: StreamOps[C]): Stream[C, T] =
     ops.delay(exp)
-  }
 
   def force[C[_], T](stream: Stream[C, T])(implicit ops: StreamOps[C]): StreamCell[C, T] =
     ops.force(stream)
@@ -32,14 +31,20 @@ package object stream {
     override def toString: String =
       s"Stream(${toList.mkString(", ")})"
 
-    def take(n: Int): Stream[C, T] = {
-      delay {
-        if(n == 0) Nil
-        else force(this) match {
-          case Nil => Nil
-          case Cons(h, t) => Cons(h, t.take(n-1))
-        }
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    def take(n: Int): Stream[C, T] = delay {
+      if(n == 0) Nil
+      else force(this) match {
+        case Nil => Nil
+        case Cons(h, t) => Cons(h, t.take(n-1))
       }
+    }
+
+    def ++(that: Stream[C, T]): Stream[C, T] = force(this) match {
+      case Nil => that
+      case Cons(h, t) => delay(Cons(h, t ++ that))
     }
   }
 

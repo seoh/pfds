@@ -20,5 +20,10 @@ object FutureStream extends App {
 
   assert(e.take(2).toString == "Stream()",      "empty.take(n) should be Nil")
   assert(s.take(0).toString == "Stream()",      "nonEmpty.take(0) should be Nil")
-  assert(s.take(2).toString == "Stream(0, 1)",  "nonEmpty.take(n) when n>0, should not be Nil") 
+  assert(s.take(2).toString == "Stream(0, 1)",  "nonEmpty.take(n) when n>0, should not be Nil")
+
+  val s2: Stream[Future, Int] = Stream.fromList((10 until 20).toList)
+  assert((s ++ s2).toString == s"Stream(${(0 until 20).mkString(", ")})", "concatenate stream")
+  assert((s ++ e).toString == s.toString)
+  assert((e ++ s).toString == s.toString)
 }
