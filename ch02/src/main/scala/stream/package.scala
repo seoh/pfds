@@ -1,3 +1,5 @@
+import scala.annotation.tailrec
+
 /**
   data StreamCell a = Nil
                     | Cons a (Stream a)
@@ -46,6 +48,14 @@ package object stream {
       force(this) match {
         case Nil => force(that)
         case Cons(h, t) => Cons(h, t ++ that)
+      }
+    }
+
+    def drop(n: Int): Stream[C, T] = delay {
+      if(n == 0) force(this)
+      else force(this) match {
+        case Nil => Nil
+        case Cons(h, t) => force(t.drop(n-1))
       }
     }
   }

@@ -26,4 +26,8 @@ object TaskStream extends App {
   assert((s ++ s2).toString == s"Stream(${(0 until 20).mkString(", ")})", "concatenate stream")
   assert((s ++ e).toString == s.toString)
   assert((e ++ s).toString == s.toString)
+
+  assert(e.drop(2).toString == "Stream()",      "empty.drop(n) should be Nil")
+  assert(s.drop(0).toString == s.toString,      "nonEmpty.drop(0) should be itself")
+  assert(s.drop(2).toString == s"Stream(${(2 until 10).mkString(", ")})")
 }
