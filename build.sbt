@@ -7,3 +7,5 @@ lazy val ch02 = (project in file("ch02")).settings(
     "io.monix" %% "monix" % "2.3.0"
   )
 )
+
+lazy val ch03 = project in file("ch03")
